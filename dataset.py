@@ -3,11 +3,12 @@ import h5py
 import numpy as np
 import glob
 
+
 class CTDataset(Dataset):
     def __init__(self, datapath, transforms_):
         self.datapath = datapath
         self.transforms = transforms_
-        self.samples = ['../..'+x.split('.')[4] for x in glob.glob(self.datapath + '/*.im')]
+        self.samples = ['../..' + x.split('.')[4] for x in glob.glob(self.datapath + '/*.im')]
 
     def __len__(self):
         return len(self.samples)
@@ -21,5 +22,5 @@ class CTDataset(Dataset):
         # print(mask.shape)
         if self.transforms:
             image, mask = self.transforms(image), self.transforms(mask)
-        
+
         return {"A": image, "B": mask}
