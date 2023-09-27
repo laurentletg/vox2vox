@@ -25,6 +25,10 @@ import torch
 
 import h5py
 
+TRAIN_PATH = '/home/llg/Dropbox/CHUM/RECHERCHE/2024 CTA COW/vox2vox/data/data for registered and resampled volumes/train'
+TEST_PATH = '/home/llg/Dropbox/CHUM/RECHERCHE/2024 CTA COW/vox2vox/data/data for registered and resampled volumes/test'
+
+
 def train():
 
     parser = argparse.ArgumentParser()
@@ -97,19 +101,38 @@ def train():
         # transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5)),
     ])
 
+    # ORIGINAL VERSION FOR REFERENCE. I WILL CHANGE THE PATHS
+    # dataloader = DataLoader(
+    #     CTDataset("../../data/%s/train/" % opt.dataset_name, transforms_=transforms_),
+    #     batch_size=opt.batch_size,
+    #     shuffle=True,
+    #     num_workers=opt.n_cpu,
+    # )
+    #
+    # val_dataloader = DataLoader(
+    #     CTDataset("../../data/%s/test/" % opt.dataset_name, transforms_=transforms_),
+    #     batch_size=1,
+    #     shuffle=True,
+    #     num_workers=1,
+    # )
+
+
     dataloader = DataLoader(
-        CTDataset("../../data/%s/train/" % opt.dataset_name, transforms_=transforms_),
+        CTDataset("TRAIN_PATH", transforms_=transforms_),
         batch_size=opt.batch_size,
         shuffle=True,
         num_workers=opt.n_cpu,
     )
 
     val_dataloader = DataLoader(
-        CTDataset("../../data/%s/test/" % opt.dataset_name, transforms_=transforms_),
+        CTDataset("TEST_PATH", transforms_=transforms_),
         batch_size=1,
         shuffle=True,
         num_workers=1,
     )
+
+
+
 
     # Tensor type
     Tensor = torch.cuda.FloatTensor if cuda else torch.FloatTensor

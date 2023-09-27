@@ -1,7 +1,5 @@
 import os, re, glob, shutil
-import torch
 from sklearn.model_selection import train_test_split
-import nibabel as nib
 
 # Check if gpu is available
 print(torch.cuda.is_available())
