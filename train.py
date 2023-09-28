@@ -8,6 +8,7 @@ import datetime
 import sys
 
 import torchvision.transforms as transforms
+from torchvision.transforms import Resize
 from torchvision.utils import save_image
 
 from torch.utils.data import DataLoader
@@ -25,16 +26,16 @@ import torch
 
 import h5py
 
-TRAIN_PATH = '/home/llg/Dropbox/CHUM/RECHERCHE/2024 CTA COW/vox2vox/data/data for registered and resampled volumes/train'
-TEST_PATH = '/home/llg/Dropbox/CHUM/RECHERCHE/2024 CTA COW/vox2vox/data/data for registered and resampled volumes/test'
+TRAIN_PATH = '/home/llg/Dropbox/CHUM/RECHERCHE/2024 CTA COW/DATA 2023 MICCAI TopCOW23 Challenge-20230908T120155Z-008/2023 MICCAI TopCOW23 Challenge/DATA/HDF5_consecutive/train'
+TEST_PATH = '/home/llg/Dropbox/CHUM/RECHERCHE/2024 CTA COW/DATA 2023 MICCAI TopCOW23 Challenge-20230908T120155Z-008/2023 MICCAI TopCOW23 Challenge/DATA/HDF5_consecutive/test'
 
 
 def train():
 
     parser = argparse.ArgumentParser()
     parser.add_argument("--epoch", type=int, default=0, help="epoch to start training from")
-    parser.add_argument("--n_epochs", type=int, default=200, help="number of epochs of training")
-    parser.add_argument("--dataset_name", type=str, default="leftkidney_3d", help="name of the dataset")
+    parser.add_argument("--n_epochs", type=int, default=250, help="number of epochs of training")
+    parser.add_argument("--dataset_name", type=str, default="topcow23", help="name of the dataset")
     parser.add_argument("--batch_size", type=int, default=1, help="size of the batches")
     parser.add_argument("--glr", type=float, default=0.0002, help="adam: generator learning rate")
     parser.add_argument("--dlr", type=float, default=0.0002, help="adam: discriminator learning rate")
@@ -52,7 +53,7 @@ def train():
     parser.add_argument(
         "--sample_interval", type=int, default=1, help="interval between sampling of images from generators"
     )
-    parser.add_argument("--checkpoint_interval", type=int, default=-1, help="interval between model checkpoints")
+    parser.add_argument("--checkpoint_interval", type=int, default=5, help="interval between model checkpoints")
     opt = parser.parse_args()
     print(opt)
 
@@ -118,14 +119,14 @@ def train():
 
 
     dataloader = DataLoader(
-        CTDataset("TRAIN_PATH", transforms_=transforms_),
+        CTDataset(TRAIN_PATH, transforms_=transforms_),
         batch_size=opt.batch_size,
         shuffle=True,
         num_workers=opt.n_cpu,
     )
 
     val_dataloader = DataLoader(
-        CTDataset("TEST_PATH", transforms_=transforms_),
+        CTDataset(TEST_PATH, transforms_=transforms_),
         batch_size=1,
         shuffle=True,
         num_workers=1,
